@@ -1,0 +1,124 @@
+{
+    "collection": {
+        "href": "/friends",
+        "version": "1.0",
+        "links": [
+            {
+                "href": "/friends/rss",
+                "rel": "feed"
+            }
+        ],
+        "items": [
+            {
+                "href": "/friends/jdoe",
+                "data": [
+                    {
+                        "name": "fullName",
+                        "value": "J. Doe"
+                    },
+                    {
+                        "name": "email",
+                        "value": "jdoe@example.org"
+                    }
+                ],
+                "links": [
+                    {
+                        "href": "/blogs/jdoe",
+                        "rel": "blog",
+                        "prompt": "Blog"
+                    },
+                    {
+                        "href": "/blogs/jdoe/avatar",
+                        "rel": "avatar",
+                        "render": "image",
+                        "prompt": "Avatar"
+                    }
+                ]
+            },
+            {
+                "href": "/friends/msmith",
+                "data": [
+                    {
+                        "name": "fullName",
+                        "value": "M. Smith"
+                    },
+                    {
+                        "name": "email",
+                        "value": "msmith@example.org"
+                    }
+                ],
+                "links": [
+                    {
+                        "href": "/blogs/msmith",
+                        "rel": "blog",
+                        "prompt": "Blog"
+                    },
+                    {
+                        "href": "/blogs/msmith/avatar",
+                        "rel": "avatar",
+                        "render": "image",
+                        "prompt": "Avatar"
+                    }
+                ]
+            },
+            {
+                "href": "/friends/rwilliams",
+                "data": [
+                    {
+                        "name": "fullName",
+                        "value": "R. Williams"
+                    },
+                    {
+                        "name": "email",
+                        "value": "rwilliams@example.org"
+                    }
+                ],
+                "links": [
+                    {
+                        "href": "/blogs/rwilliams",
+                        "rel": "blog",
+                        "prompt": "Blog"
+                    },
+                    {
+                        "href": "/blogs/rwilliams/avatar",
+                        "rel": "avatar",
+                        "render": "image",
+                        "prompt": "Avatar"
+                    }
+                ]
+            }
+        ],
+        "queries": [
+            {
+                "href": "/friends/search",
+                "rel": "search",
+                "prompt": "Search",
+                "data": [
+                    {
+                        "name": "search"
+                    }
+                ]
+            }
+        ],
+        "template": {
+            "data": [
+                {
+                    "name": "fullName",
+                    "prompt": "Full Name"
+                },
+                {
+                    "name": "email",
+                    "prompt": "Email"
+                },
+                {
+                    "name": "blog",
+                    "prompt": "Blog"
+                },
+                {
+                    "name": "avatar",
+                    "prompt": "Avatar"
+                }
+            ]
+        }
+    }
+}
