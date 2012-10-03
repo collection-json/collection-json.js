@@ -1,50 +1,41 @@
 
 should = require "should"
-sampleJson = require "./sample.json"
-sample = require "./sample.coffee"
 
-describe "Collection+JSON", ()->
-  describe "create()", ()->
+cj = require ".."
 
-    it "should generate an object with the attributes we expect", ->      
-      collection = sample()
-      # Collection
-      should.exist collection.href
-      collection.href.should.equal "/friends"
-      # Links
-      should.exist collection.links
-      should.exist collection.links[0]
-      collection.links[0].href.should.equal "/friends/rss"
-      collection.link('feed').href.should.equal "/friends/rss"
-      # Items
-      should.exist collection.items
-      should.exist collection.items[0]
-      should.exist collection.items[0].data
-      should.exist collection.items[0].links
-      collection.items.length.should.equal 3
-      collection.items[0].data.length.should.equal 2
-      collection.items[0].datum("fullName").value.should.equal "J. Doe"
-      collection.items[0].links.length.should.equal 2
-      # Queries
-      should.exist collection.queries
-      should.exist collection.queries[0]
-      should.exist collection.queries[0].data
-      should.exist collection.queries[0].data[0]
-      should.exist collection.queries[0].data[0].name
-      should.exist collection.query("search")
-      collection.queries.length.should.equal 1
-      collection.queries[0].href.should.equal "/friends/search"
-      collection.queries[0].data.length.should.equal 1
-      collection.queries[0].data[0].name.should.equal "search"
-      collection.query("search").prompt.should.equal "Search"
-      # Template
-      collection.template.data.length.should.equal 4
+root = "http://employee.herokuapp.com"
 
-  describe "toJSON()", ()->
+describe "Collection+JSON", ->
 
-    it "should make a correct object", ->
-      collection = sample()
-      json = collection.toJSON()
-      expected = JSON.stringify sampleJson
-      JSON.stringify(json).should.equal expected
+  describe "client", ->
 
+    it "should get a root resource", (done)->
+      cj root, (error, collection)->
+        should.not.exist error
+        should.exist collection
+        should.exist collection.link
+        should.exist collection.link("departments")
+        should.exist collection.link("employees")
+        done()
+
+    it "should follow a link from the root", (done)->
+      cj root, (error, collection)->
+        should.not.exist error
+        should.exist collection
+        collection.link("departments").follow (error, departments)->
+          should.not.exist error
+          should.exist departments
+          should.exist departments.link("next")
+          done()
+
+    it "should return some items", (done)->
+      cj root, (error, collection)->
+        should.not.exist error
+        should.exist collection
+        collection.link("departments").follow (error, departments)->
+          should.not.exist error
+          should.exist departments
+          should.exist departments.item(0)
+          should.exist departments.item(0).datum('dept_no')
+          departments.item(0).datum('dept_no').value.should.equal "d001"
+          done()

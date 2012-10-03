@@ -1,7 +1,28 @@
-Collection+JSON for JavaScript
-===========================
+Collection+JSON Client for JavaScript
+=====================================
 
-Makes reading/writing Collection+JSON a breeze
+Documentation will be finished once the API is solidified.
 
-This is modeled after [collection-json for ruby](https://github.com/sebastianedwards/collection-json)
+Example
+-------
 
+```js
+var cj = require("collection-json");
+
+cj("http://example.com", function(error, collection){
+  collection.links.follow('users', function(error, collection){
+    console.log(collection.items());
+
+    collection.items.last.links.follow('address', function(error, collection){
+      var template = collection.template();
+      template.set('street', '123 Fake Street');
+      template.submit(function(error, collection){
+
+        if (!error)
+          console.log("SUCCESS!!!");
+
+      });
+    });
+  });
+});
+```

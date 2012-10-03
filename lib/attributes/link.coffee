@@ -1,10 +1,12 @@
 
-Attribute = require "../attribute"
+http = require "../http"
 
-module.exports = class Link extends Attribute
-  constructor: (params={})->
-    super()
-    @href = params.href||throw Error "Href must be defined"
-    @rel = params.rel||throw Error "Rel must be defined"
-    @render = params.render
-    @prompt = params.prompt
+Collection = require "./collection"
+
+module.exports = class Link
+  constructor: (@_link)->
+
+  follow: (done=()->)->
+    http.get @_link.href, {}, (error, collection)->
+      done error if error
+      done null, new Collection collection

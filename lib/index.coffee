@@ -1,15 +1,25 @@
 
-Collection = require "./attributes/collection"
-require "./attributes/datum"
-require "./attributes/error"
-require "./attributes/item"
-require "./attributes/link"
-require "./attributes/query"
-require "./attributes/template"
+request = require "request"
+http = require "./http"
 
-module.exports =
-  create: (href)->
-    new Collection(href)
+http._get = (href, options, done)->
+  options.url = href
+  request options, (error, response)->
+    done error, response
 
-  parse: (json)->
+http._post = (href, options, done)->
+  options.url = href
+  request.post options, (error, response)->
+    done error, response
 
+http._put = (href, options, done)->
+  options.url = href
+  request.put options, (error, response)->
+    done error, response
+
+http._del = (href, options, done)->
+  options.url = href
+  request.del options, (error, response)->
+    done error, response
+
+module.exports = require "./client"

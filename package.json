@@ -1,19 +1,20 @@
 {
   "name": "collection-json",
   "version": "0.0.0",
-  "description": "Collection+JSON Parsing/Generation Library",
+  "description": "Collection+JSON Client",
   "main": "index.js",
   "scripts": {
-    "test": "node_modules/.bin/mocha --compilers coffee:coffee-script test"
+    "test": "node_modules/.bin/mocha -R spec --compilers coffee:coffee-script test"
   },
   "repository": "git://github.com/CamShaft/collection-json.js.git",
   "author": "Cameron Bytheway",
-  "license": "BSD",
+  "license": "MIT",
   "dependencies": {
     "coffee-script": "~1.3.3",
+    "request": "2.11.4",
     "underscore": "~1.3.3"
   },
-  "browserify" : "browser/index.js",
+  "browserify" : "lib/browser.coffee",
   "devDependencies": {
     "mocha": "~1.5.0",
     "should": "~1.2.0",

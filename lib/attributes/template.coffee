@@ -1,9 +1,10 @@
 
-Attribute = require "../attribute"
-nest = require "../nest"
 
-module.exports = class Template extends Attribute
-  constructor: (params={})->
-    super()
+module.exports = class Template
+  constructor: (@_template)->
+    @_form = {}
+  
+  submit: ()->
 
-nest Template, "data", {adder: true, find: "name", single: "datum"}
+  set: (key, value)->
+    @_form[key] = value

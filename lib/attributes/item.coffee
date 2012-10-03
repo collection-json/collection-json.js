@@ -1,11 +1,16 @@
 
-Attribute = require "../attribute"
-nest = require "../nest"
+_ = require "underscore"
 
-module.exports = class Item extends Attribute
-  constructor: (params={})->
-    super()
-    @href = params.href||throw Error "Href must be defined"
+Collection = require "./collection"
+Link = require "./link"
 
-nest Item, "links", {adder: true, find: "rel"}
-nest Item, "data", {adder: true, find: "name", single: "datum"}
+module.exports = class Item
+  constructor: (@_item)->
+
+  data: ()->
+    @_item.data
+
+  datum: (name)->
+    datum = _.find @_item.data||[], (datum)->
+      datum.name is name
+    datum
