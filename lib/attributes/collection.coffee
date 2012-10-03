@@ -33,9 +33,29 @@ module.exports = class Collection
     return null if not item
 
     Item = require "./item"
-    @_items[index] = new Item(item) if item
+    @_items[index] = new Item(item, @_collection.template) if item
     @_items[index]
 
-  template: ()->
+  addItem: ()->
+    throw new Error("Collection does not support adding items") if not @_collection.template
     Template = require "./template"
-    new Template @_collection.template
+    template = _.clone @_collection.template
+    template.href = @_collection.href
+    new Template template
+
+  queries: ()->
+    @_collection.queries
+
+  query: (rel)->
+    query = _.find @_collection.queries||[], (query)->
+      query.rel is rel
+    return null if not query
+
+    Query = require "./query"
+    # Don't cache it since we allow you to set parameters and submit it
+    new Query query
+
+  # TODO support multiple templates:
+  # https://github.com/mamund/collection-json/blob/master/extensions/templates.md
+  templates: ()->
+  template: (name)->

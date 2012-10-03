@@ -36,6 +36,28 @@ describe "Collection+JSON", ->
           should.not.exist error
           should.exist departments
           should.exist departments.item(0)
-          should.exist departments.item(0).datum('dept_no')
-          departments.item(0).datum('dept_no').value.should.equal "d001"
+          should.exist departments.item(0).datum("dept_no")
+          departments.item(0).datum("dept_no").should.equal "d001"
           done()
+
+    it "should edit an item"#, (done)->
+      # cj root, (error, collection)->
+      #   should.not.exist error
+      #   should.exist collection
+      #   collection.link("departments").follow (error, departments)->
+      #     should.not.exist error
+      #     should.exist departments
+      #     template = should.exist departments.item(0).edit()
+      #     template.set "dept_name", "Marketing and Fun"
+      #     template.submit (error, department)->
+      #       should.not.exist error
+      #       should.exist department
+      #       done()
+
+    it "should follow an item's link"
+    it "should add a new item"
+
+    it "should submit a query"
+    it "should submit a query with uri-templates"
+    it "should submit a form"
+    it "should validate a form"

@@ -42,14 +42,26 @@ module.exports.get = (href, options, done)->
     options.headers ||= {}
     options["accept"] = module.exports["content-type"]
 
+    module.exports.setOptions href, options
+
     defaults._get href, options, (error, response)->
-      performCache href, response
+      performCache response
       done error, JSON.parse response.body
 
-performCache = (href, response)->
+module.exports.post = (href, options, done)->
+  module.exports.setOptions href, options
+  
+  defaults._post href, options, (error, response)->
+    # Do we cache this?
+    done error, JSON.parse response.body
+
+# Should be overridden by the client
+module.exports.setOptions = (href, options)->
+
+performCache = (response)->
   # Expires
   expires = response.headers.expires
   # TODO convert to time-from-now
   # Cache-Control
   # TODO implement
-  defaults.cache.put href, response.body, new Date(expires).getTime() if expires
+  defaults.cache.put response.request.href, response.body, new Date(expires).getTime() if expires

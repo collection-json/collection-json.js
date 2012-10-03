@@ -3,6 +3,16 @@ Collection+JSON Client for JavaScript [![Build Status](https://secure.travis-ci.
 
 Documentation will be finished once the API is solidified.
 
+Features
+--------
+
+* Simple API
+* Node.js and Browser compatible
+* Query/Template building
+* HTTP client
+* Built in caching with the ability to add a custom backend (Memory, LocalStorage, Memcache, Redis, Riak, etc)
+
+
 Example
 -------
 
@@ -10,10 +20,10 @@ Example
 var cj = require("collection-json");
 
 cj("http://example.com", function(error, collection){
-  collection.links.follow('users', function(error, collection){
+  collection.link('users').follow(function(error, collection){
     console.log(collection.items());
 
-    collection.items.last.links.follow('address', function(error, collection){
+    collection.item(0).link('address').follow(function(error, collection){
       var template = collection.template();
       template.set('street', '123 Fake Street');
       template.submit(function(error, collection){

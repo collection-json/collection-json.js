@@ -1,12 +1,24 @@
 
-Attribute = require "../attribute"
-nest = require "../nest"
+http = require "../http"
 
-module.exports = class Query extends Attribute
-  constructor: (params={})->
-    super()
-    @href = params.href||throw Error "Href must be defined"
-    @rel = params.rel||throw Error "Rel must be defined"
-    @prompt = params.prompt
+Collection = require "./collection"
 
-nest Query, "data", {adder: true, find: "name", single: "datum"}
+module.exports = class Query
+  constructor: (@_query, @_form={})->
+  
+  submit: (done=()->)->
+    # TODO support URI templates
+    # https://github.com/mamund/collection-json/blob/master/extensions/uri-templates.md
+    options =
+      qs: @_form
+
+    http.get @_query.href, options, (error, collection)->
+      done error if error
+      done null, new Collection collection
+
+  set: (key, value)->
+    # Do validation here if present
+    @_form[key] = value
+
+  get: (key)->
+    @_form[key]

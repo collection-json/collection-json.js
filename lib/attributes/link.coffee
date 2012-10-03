@@ -7,6 +7,8 @@ module.exports = class Link
   constructor: (@_link)->
 
   follow: (done=()->)->
-    http.get @_link.href, {}, (error, collection)->
+    options = {}
+
+    http.get @_link.href, options, (error, collection)->
       done error if error
       done null, new Collection collection
