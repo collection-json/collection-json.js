@@ -45,6 +45,7 @@ module.exports.get = (href, options, done)->
     module.exports.setOptions href, options
 
     defaults._get href, options, (error, response)->
+      done error if error
       performCache response
       done error, JSON.parse response.body
 

@@ -27,7 +27,7 @@ module.exports = class Item
   data: ()->
     if not @_data
       @_data = {}
-      for datum in @_item.data
+      for datum in @_item.data or []
         @_data[datum.name] = datum.value
     @_data
 

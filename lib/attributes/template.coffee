@@ -1,4 +1,6 @@
 
+_ = require "underscore"
+
 http = require "../http"
 
 Collection = require "./collection"
@@ -11,9 +13,9 @@ module.exports = class Template
       name: name, value: value
 
     options =
-      body:
-        template:
-          data: form
+      body: JSON.stringify
+              template:
+                data: form
 
     http.post @_template.href, options, (error, collection)->
       done error if error

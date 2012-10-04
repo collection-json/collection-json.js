@@ -13,6 +13,9 @@ module.exports = class Collection
     @_items = {}
     @_template = null
 
+  href: ()->
+    @_collection.href
+
   links: ()->
     @_collection.links
 
