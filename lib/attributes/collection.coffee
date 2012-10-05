@@ -1,5 +1,5 @@
 
-_ = require "underscore"
+_ = if not process.browser then require "underscore" else window._
 http = require "../http"
 
 module.exports = class Collection

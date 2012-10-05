@@ -6,6 +6,9 @@ Collection = require "./collection"
 module.exports = class Link
   constructor: (@_link)->
 
+  href: ()->
+    @_link.href
+
   follow: (done=()->)->
     options = {}
 

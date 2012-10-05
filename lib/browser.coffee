@@ -10,3 +10,4 @@
 # http.del = (href, options={}, done=()->)->
 
 window.CollectionJSON = require "./client"
+window.CollectionJSON.http = require "./http"

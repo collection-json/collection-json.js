@@ -1,9 +1,10 @@
 {
   "name": "collection-json",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Collection+JSON Client",
   "main": "index.js",
   "scripts": {
+    "install": "node_modules/browserify/bin/cmd.js -o collection-json.js -i underscore -e lib/browser.coffee",
     "test": "node_modules/.bin/mocha -R spec --compilers coffee:coffee-script test"
   },
   "repository": "git://github.com/CamShaft/collection-json.js.git",
