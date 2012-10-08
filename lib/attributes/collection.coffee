@@ -1,53 +1,66 @@
 
-_ = if not process.browser then require "underscore" else window._
+_ = require "underscore"
 http = require "../http"
+
+Function::define = (prop, desc) ->
+  Object.defineProperty @prototype, prop, desc
 
 module.exports = class Collection
   constructor: (collection)->
     # Lets verify that it's a valid collection
-    if not collection?.collection?.version is "1.0"
+    if collection?.collection?.version isnt "1.0"
       throw new Error "Collection does not conform to Collection+JSON 1.0 Spec"
 
     @_collection = collection.collection
-    @_links = {}
-    @_items = {}
+    @_links = null
+    @_queries = null
+    @_items = null
     @_template = null
+    @error = @_collection.error
 
-  href: ()->
-    @_collection.href
+  @define "href"
+    get: ->
+      @_collection.href
+  @define "version"
+    get: ->
+      @_collection.version
 
-  links: ()->
-    @_collection.links
+  @define "links",
+    get: ->
+      return @_links if @_links
+
+      @_links = links = []
+      Link = require "./link"
+
+      _.each @_collection.links, (link)->
+        links.push new Link link
+      @_links
 
   link: (rel)->
-    link = _.find @_collection.links||[], (link)->
-      link.rel is rel
-    return null if not link
+    _.find @links, (link)-> link.rel is rel
 
-    Link = require "./link"
-    @_links[rel] = new Link(link) if link
-    @_links[rel]
+  @define "items",
+    get: ->
+      return @_items if @_items
 
-  items: ()->
-    @_collection.items
+      @_items = items = []
+      Item = require "./item"
 
-  item: (index)->
-    item = @_collection.items[index]
-    return null if not item
+      _.each @_collection.items, (item)->
+        items.push new Item item
+      @_items
 
-    Item = require "./item"
-    @_items[index] = new Item(item, @_collection.template) if item
-    @_items[index]
+  item: (href)->
+    _.find @items, (item)-> item.href is href
 
-  addItem: ()->
-    throw new Error("Collection does not support adding items") if not @_collection.template
-    Template = require "./template"
-    template = _.clone @_collection.template
-    template.href = @_collection.href
-    new Template template
+  @define "queries",
+    get: ->
+      queries = []
+      Query = require "./query"
 
-  queries: ()->
-    @_collection.queries
+      _.each @_collection.queries||[], (query)->
+        queries.push new Query query
+      queries
 
   query: (rel)->
     query = _.find @_collection.queries||[], (query)->
@@ -60,5 +73,7 @@ module.exports = class Collection
 
   # TODO support multiple templates:
   # https://github.com/mamund/collection-json/blob/master/extensions/templates.md
-  templates: ()->
+
   template: (name)->
+    Template = require "./template"
+    new Template @_collection.href, @_collection.template

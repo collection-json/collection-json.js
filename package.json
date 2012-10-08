@@ -1,11 +1,11 @@
 {
   "name": "collection-json",
-  "version": "0.1.1",
+  "version": "0.2.1",
   "description": "Collection+JSON Client",
   "main": "index.js",
   "scripts": {
-    "install": "node_modules/browserify/bin/cmd.js -o collection-json.js -i underscore -e lib/browser.coffee",
-    "test": "node_modules/.bin/mocha -R spec --compilers coffee:coffee-script test"
+    "install": "make client",
+    "test": "make test && make test-acceptance"
   },
   "repository": "git://github.com/CamShaft/collection-json.js.git",
   "author": "Cameron Bytheway",
@@ -13,12 +13,16 @@
   "dependencies": {
     "coffee-script": "~1.3.3",
     "request": "2.11.4",
-    "underscore": "~1.3.3"
+    "underscore": "~1.4.2"
   },
   "browserify" : "lib/browser.coffee",
   "devDependencies": {
+    "browserify": "~1.16.1",
+    "cradle": "~0.6.4",
+    "express": "~3.0.0",
+    "cscj": "~0.0.1",
     "mocha": "~1.5.0",
     "should": "~1.2.0",
-    "browserify": "~1.16.1"
+    "uglify-js": "~1.3.3"
   }
 }

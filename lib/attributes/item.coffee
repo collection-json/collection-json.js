@@ -1,7 +1,7 @@
 
-_ = if not process.browser then require "underscore" else window._
-
+_ = require "underscore"
 http = require "../http"
+client = require "../client"
 
 Collection = require "./collection"
 Link = require "./link"
@@ -12,8 +12,25 @@ module.exports = class Item
     @_links = {}
     @_data = null
 
-  href: ()->
-    @_item.href
+  @define "href", get: ()-> @_item.href
+
+  datum: (key)->
+    datum = _.find @_item.data, (item)-> item.name is key
+    # So they don't edit it
+    _.clone datum
+
+  get: (key)->
+    @datum(key)?.value
+
+  promptFor: (key)->
+    @datum(key)?.prompt
+
+  load: (done)->
+    options = {}
+
+    http.get @_item.href, options, (error, collection)->
+      return done error if error
+      client.parse collection, done
     
   links: ()->
     @_item.links
@@ -27,18 +44,6 @@ module.exports = class Item
     @_links[rel] = new Link(link) if link
     @_links[rel]
 
-  data: ()->
-    if not @_data
-      @_data = {}
-      for datum in @_item.data or []
-        @_data[datum.name] = datum.value
-    @_data
-
-  datum: (name)->
-    datum = _.find @_item.data||[], (datum)->
-      datum.name is name
-    datum?.value
-
   edit: ()->
     throw new Error("Item does not support editing") if not @_template
     template = _.clone @_template
@@ -48,4 +53,5 @@ module.exports = class Item
   remove: (done)->
     options = {}
     http.del @_item.href, options, (error, collection)->
-      done error, new Collection collection
+      return done error if error
+      client.parse collection, done

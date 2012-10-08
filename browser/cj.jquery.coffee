@@ -1,6 +1,7 @@
 
-# http = require "./http"
+http = require "../lib/http"
 
+# TODO
 # http.get = (href, options={}, done=()->)->
 
 # http.post = (href, options={}, done=()->)->
@@ -9,5 +10,5 @@
 
 # http.del = (href, options={}, done=()->)->
 
-window.CollectionJSON = require "./client"
-window.CollectionJSON.http = require "./http"
+window.CollectionJSON = require "../lib/client"
+window.CollectionJSON.http = http

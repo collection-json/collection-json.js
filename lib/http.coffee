@@ -37,32 +37,37 @@ module.exports["content-type"] = "application/vnd.collection+json"
 module.exports.get = (href, options, done)->
   defaults.cache.get href, (error, collection)->
     # Give them the cached stuff if we have it
-    done error, collection if error or collection
+    return done error, collection if error or collection
 
     options.headers ||= {}
-    options["accept"] = module.exports["content-type"]
+    options.headers["accept"] = module.exports["content-type"]
 
     module.exports.setOptions href, options
 
-    defaults._get href, options, (error, response)->
-      done error if error
-      performCache response
-      done error, JSON.parse response.body
+    defaults._get href, options, (error, collection, headers)->
+      return done error if error
+      performCache collection, headers
+      done error, collection
 
-module.exports.post = (href, options, done)->
+module.exports.post = (href, options={}, done)->
+
+  options.headers ||= {}
+  options.headers["accept"] = module.exports["content-type"]
+  options.headers["content-type"] = module.exports["content-type"]
+
   module.exports.setOptions href, options
   
-  defaults._post href, options, (error, response)->
+  defaults._post href, options, (error, collection, headers)->
     # Do we cache this?
-    done error, JSON.parse response.body
+    done error, collection
 
 # Should be overridden by the client
 module.exports.setOptions = (href, options)->
 
-performCache = (response)->
+performCache = (collection, headers)->
   # Expires
-  expires = response.headers.expires
-  # TODO convert to time-from-now
-  # Cache-Control
-  # TODO implement
-  defaults.cache.put response.request.href, response.body, new Date(expires).getTime() if expires
+  # expires = response.headers.expires
+  # # TODO convert to time-from-now
+  # # Cache-Control
+  # # TODO implement
+  # defaults.cache.put response.request.href, response.body, new Date(expires).getTime() if expires

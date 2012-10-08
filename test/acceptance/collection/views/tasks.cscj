@@ -1,0 +1,15 @@
+
+@collection ->
+  @href site
+
+  links @
+  queries @
+
+  for task in tasks
+    @item ->
+      @href "#{site}/#{task._id}"
+      @datum name: "description", value: task.description, prompt: "Description"
+      @datum name: "completed", value: task.completed, prompt: "Completed"
+      @datum name: "dateDue", value: task.dateDue, prompt: "Date Due"
+  
+  template @

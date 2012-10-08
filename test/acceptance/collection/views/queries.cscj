@@ -1,0 +1,6 @@
+
+@collection ->
+  @href site
+
+  links @
+  queries @
