@@ -23,6 +23,11 @@ app.configure ->
   # @use express.bodyParser()
 
   @use (req, res, next)->
+    res.header "Access-Control-Allow-Origin", "*"
+    res.header "Access-Control-Allow-Headers", "X-Requested-With, X-SessionID, X-UserID"
+    if req.method is 'OPTIONS' then res.send(200) else next()
+
+  @use (req, res, next)->
     if req.get("content-type") is "application/vnd.collection+json"
       buf = ""
       req.on "data", (chunk)->
@@ -40,6 +45,8 @@ app.configure ->
 
   @use express.methodOverride()
   @use @router
+
+  @locals.site = site
 
   # Make a layout helper
   @locals.queries = (collection)->
@@ -109,19 +116,19 @@ app.get "/collection/tasks", (req, res, next) ->
     return next err if err
     res.set "content-type", contentType
     res.render "tasks",
-      site: site
+      href: site
       tasks: doc
 
 # filters
 app.get "/collection/tasks/;queries", (req, res) ->
   res.set "content-type", contentType
   res.render "queries",
-    site: site
+    href: "#{site}/;queries"
 
 app.get "/collection/tasks/;template", (req, res) ->
   res.set "content-type", contentType
   res.render "template",
-    site: site
+    href: "#{site}/;template"
 
 app.get "/collection/tasks/;all", (req, res, next) ->
   view = "/_design/example/_view/all"
@@ -129,7 +136,7 @@ app.get "/collection/tasks/;all", (req, res, next) ->
     return next err if err
     res.set "content-type", contentType
     res.render "tasks",
-      site: site
+      href: "#{site}/;all"
       tasks: doc
 
 app.get "/collection/tasks/;open", (req, res, next) ->
@@ -138,7 +145,7 @@ app.get "/collection/tasks/;open", (req, res, next) ->
     return next err if err
     res.set "content-type", contentType
     res.render "tasks",
-      site: site
+      href: "#{site}/;open"
       tasks: doc
 
 app.get "/collection/tasks/;closed", (req, res, next) ->
@@ -147,7 +154,7 @@ app.get "/collection/tasks/;closed", (req, res, next) ->
     return next err if err
     res.set "content-type", contentType
     res.render "tasks",
-      site: site
+      href: "#{site}/;closed"
       tasks: doc
 
 app.get "/collection/tasks/;date-range", (req, res, next) ->
@@ -160,7 +167,7 @@ app.get "/collection/tasks/;date-range", (req, res, next) ->
     return next err if err
     res.set "content-type", contentType
     res.render "tasks",
-      site: site
+      href: "#{site}/;date-range?date-start=#{options.startDate}&date-stop=#{options.endDate}"
       tasks: doc
 
 # handle single task item
@@ -171,11 +178,11 @@ app.get "/collection/tasks/:i", (req, res, next) ->
     res.set "content-type", contentType
     res.set "etag", doc._rev
     res.render "tasks",
-      site: site
+      href: "#{site}/#{view}"
       tasks: [doc]
 
-# handle creating a new task 
-app.post "/collection/tasks", (req, res, next) ->
+# handle creating a new task
+addTask = (req, res, next) ->
   description = undefined
   completed = undefined
   dateDue = undefined
@@ -210,6 +217,13 @@ app.post "/collection/tasks", (req, res, next) ->
       next err
     else
       res.redirect 303, site
+# We need to handle posting to anywhere we show the template
+app.post "/collection/tasks", addTask
+app.post "/collection/tasks/;template", addTask
+app.post "/collection/tasks/;all", addTask
+app.post "/collection/tasks/;closed", addTask
+app.post "/collection/tasks/;open", addTask
+app.post "/collection/tasks/;date-range", addTask
 
 # handle updating an existing task item 
 app.put "/collection/tasks/:i", (req, res, next) ->

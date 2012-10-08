@@ -3,27 +3,28 @@ http = require "../lib/http"
 angular = window.angular
 client = require "../lib/client"
 
-cj = angular.module "collection-json"
+cj = angular.module "collection-json", []
 
 cj.factory "collection-json", [
   "$http"
 
   ($http)->
     http._get = (href, options, done)->
+      # Rename things for angular
+      options.params = options.qs
       $http.get(href, options)
         .success((data, status, headers, config)->
-          done null,
-            request:
-              href: href
-            body: data
-            headers: headers
+          done null, data, headers
         )
         .error((data, status, headers, config)->
-          done status,
-            request:
-              href: href
-            body: data
-            headers: headers
+          error = null
+          if status is 0
+            error = new Error
+            error.code = 0
+            error.title = "Could not connect to the specified host"
+            error.message = "Make sure the specified host exists and is working properly"
+
+          done error, data, headers
         )
 
 

@@ -1,5 +1,5 @@
 
-_ = require "underscore"
+_ = require "../underscore"
 http = require "../http"
 
 Function::define = (prop, desc) ->

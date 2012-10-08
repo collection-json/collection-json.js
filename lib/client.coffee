@@ -12,7 +12,9 @@ module.exports = (href, options, done)->
 
 # Expose parse
 module.exports.parse = (collection, done)->
-  throw new Error("Callback must be passed to parse") if not done
+  # Throw an error telling the caller it needs a callback for this
+  # function to make sense
+  throw new Error("Callback must be passed to parse") if not done?
 
   # Is collection defined?
   if not collection?
@@ -23,6 +25,8 @@ module.exports.parse = (collection, done)->
     try
       collection = JSON.parse collection
     catch e
+      e.body = collection
+      console.log e.body
       done e
 
   # Create a new Collection
@@ -30,6 +34,7 @@ module.exports.parse = (collection, done)->
   try
     collectionObj = new module.exports.Collection collection
   catch e
+    e.body = JSON.stringify collection
     return done e
 
   error = null
@@ -38,6 +43,7 @@ module.exports.parse = (collection, done)->
     error.title = _error.title
     error.message = _error.message
     error.code = _error.code
+    error.body = JSON.stringify collection
 
   done error, collectionObj
 

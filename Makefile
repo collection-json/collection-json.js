@@ -18,10 +18,9 @@ build:
 build/collection-json.js: build
 	@echo "Building bare"
 	@./node_modules/browserify/bin/cmd.js \
-		-o build/collection-json.js \
-		-a 'underscore:/browser/underscore.coffee' \
-		-r './browser/underscore' \
-		-e browser/cj.bare.coffee
+		-i 'underscore' \
+		browser/cj.bare.coffee \
+		-o build/collection-json.js
 build/collection-json.min.js: build
 	@echo "Minify bare"
 	@./node_modules/.bin/uglifyjs \
@@ -31,10 +30,9 @@ build/collection-json.min.js: build
 build/collection-json.angular.js: build
 	@echo "Building angular"
 	@./node_modules/browserify/bin/cmd.js \
-		-o build/collection-json.angular.js \
-		-a 'underscore:/browser/underscore.coffee' \
-		-r './browser/underscore' \
-		-e browser/cj.angular.coffee
+		-i 'underscore' \
+		browser/cj.angular.coffee \
+		-o build/collection-json.angular.js
 build/collection-json.angular.min.js: build
 	@echo "Minify angular"
 	@./node_modules/.bin/uglifyjs \
@@ -44,10 +42,9 @@ build/collection-json.angular.min.js: build
 build/jquery.collection-json.js: build
 	@echo "Building jquery"
 	@./node_modules/browserify/bin/cmd.js \
-		-o build/jquery.collection-json.js \
-		-a 'underscore:/browser/underscore.coffee' \
-		-r './browser/underscore' \
-		-e browser/cj.jquery.coffee
+		-i 'underscore' \
+		browser/cj.jquery.coffee \
+		-o build/jquery.collection-json.js
 build/jquery.collection-json.min.js: build
 	@echo "Minify jquery"
 	@./node_modules/.bin/uglifyjs \

@@ -1,5 +1,5 @@
 
-_ = require "underscore"
+_ = require "../underscore"
 http = require "../http"
 client = require "../client"
 
@@ -10,11 +10,11 @@ module.exports = class Template
     _template = @_template
     _form = @form
 
-    _.each _template.data, (datum)->
+    _.each _template?.data or [], (datum)->
       _form[datum.name] = datum.value if not _form[datum.name]?
 
   datum: (key)->
-    datum = _.find @_template.data, (datum)-> datum.name is key
+    datum = _.find @_template?.data or [], (datum)-> datum.name is key
     _.clone datum
 
   get: (key)->

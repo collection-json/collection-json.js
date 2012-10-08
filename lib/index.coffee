@@ -2,8 +2,6 @@
 request = require "request"
 http = require "./http"
 
-request.defaults followAllRedirects: true
-
 http._get = (href, options, done)->
   options.url = href
   request options, (error, response, body)->
