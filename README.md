@@ -27,7 +27,7 @@ cj("http://example.com", function(error, collection){
   collection.link('users').follow(function(error, collection){
 
     // Print out the current users
-    console.log(collection.items());
+    console.log(collection.items);
 
     // Lets get a list of addresses from the first user we got back
     collection.items[0].link('addresses').follow(function(error, collection){
