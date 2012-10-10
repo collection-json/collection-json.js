@@ -19,17 +19,27 @@ Example
 ```js
 var cj = require("collection-json");
 
+// Start at the root of our api
 cj("http://example.com", function(error, collection){
+
+  // We get back a collection object
+  // Let's follow the 'users' link
   collection.link('users').follow(function(error, collection){
+
+    // Print out the current users
     console.log(collection.items());
 
-    collection.item(0).link('address').follow(function(error, collection){
+    // Lets get a list of addresses from the first user we got back
+    collection.items[0].link('addresses').follow(function(error, collection){
+
+      // Let's add a new address from the template
       var template = collection.template();
       template.set('street', '123 Fake Street');
-      template.submit(function(error, collection){
 
+      // Submit our new template
+      template.submit(function(error, collection){
         if (!error)
-          console.log("SUCCESS!!!");
+          console.log("Added a new address!!!");
 
       });
     });
