@@ -4,7 +4,7 @@
   "description": "Collection+JSON Client",
   "main": "index.js",
   "scripts": {
-    "install": "make client",
+    "client": "make client",
     "test": "make test && make test-acceptance"
   },
   "repository": "git://github.com/CamShaft/collection-json.js.git",
