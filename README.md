@@ -10,8 +10,6 @@ Features
 * Node.js and Browser compatible
 * Query/Template building
 * HTTP client
-* Built in caching with the ability to add a custom backend (Memory, LocalStorage, Memcache, Redis, Riak, etc)
-
 
 Example
 -------

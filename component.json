@@ -1,0 +1,23 @@
+{
+  "name": "collection-json",
+  "repo": "collection-json/collection-json.js",
+  "description": "Collection+JSON Client for JavaScript",
+  "version": "0.3.0",
+  "keywords": [],
+  "dependencies": {
+    "visionmedia/superagent": "*",
+    "component/each": "*"
+  },
+  "development": {},
+  "license": "MIT",
+  "main": "lib/collection-json.js",
+  "scripts": [
+    "lib/collection-json.js",
+    "lib/http.js",
+    "lib/attributes/collection.js",
+    "lib/attributes/item.js",
+    "lib/attributes/link.js",
+    "lib/attributes/query.js",
+    "lib/attributes/template.js"
+  ]
+}
